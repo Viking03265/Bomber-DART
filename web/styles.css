@@ -1,0 +1,254 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    display: grid;
+    grid-template-rows: 50px auto auto;
+    grid-template-columns: 100%;
+    grid-template-areas: "topbar topbar topbar" "leftbar game ." "footer footer footer";
+    background: #232323;
+    image-rendering: pixelated;
+}
+
+#topbar {
+    text-align: center;
+    grid-area: topbar;
+    display: inline-grid;
+    grid-template-columns: auto auto min-content auto auto;
+    align-items: center;
+    /*border-bottom: 1px solid black;*/
+    font-size: larger;
+    font-weight: bolder;
+    width: 70vw;
+    margin: auto;
+    margin-bottom: 0;
+}
+
+#topbar div {
+    display: flex;
+    display: inline-flex;
+    padding: 0 0px 0 -5px;
+    margin: auto;
+}
+
+#gamecontainer {
+    grid-area: game;
+    position: relative;
+    justify-content: center;
+}
+
+#border {
+    background-image: url(img/border.png);
+    background-size: 40px;
+    width: max-content;
+    height: max-content;
+    margin: auto;
+    padding: 40px;
+}
+
+#tilecontainer {
+    position: relative;
+    border-spacing: 0;
+    display: inline-grid;
+    grid-template-columns: repeat(30, 40px);
+    grid-template-rows: repeat(30, 40px);
+    background-image: url('img/back.png');
+    background-size: 40px;
+}
+
+#tilecontainer div {
+    /*border: 1px solid black;*/
+}
+
+#tilecontainer .wall {
+    background-image: url('img/stone_wall.png');
+    background-size: contain;
+}
+
+#tilecontainer .human {
+    background-image: url('img/wall.png');
+    background-size: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#tilecontainer .explosion {
+    background-color: orangered;
+}
+
+#tilecontainer .empty {
+    /*background-color: white;*/
+}
+
+#viruscontainer div {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    transform: translate(-20px, -20px);
+}
+
+#bombcontainer div {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    transform: translate(-20px, -20px);
+}
+
+#upgradecontainer div {
+    position: absolute;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    transform: translate(-20px, -20px);
+}
+
+.points {
+    padding-left: 30px;
+    font-size: 24px;
+    line-height: 30px;
+    color: white;
+}
+
+.strength {
+    padding-left: 7px;
+    font-size: 20px;
+    color: deeppink;
+}
+
+.maxbombs {
+    padding-left: 7px;
+    font-size: 20px;
+    color: aquamarine;
+}
+
+.actbombs {
+    padding-left: 7px;
+    font-size: 20px;
+    color: coral;
+}
+
+#timer {
+    color: white;
+    font-size: 28px;
+}
+
+#player0 {
+    background-image: url('img/virus00.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+}
+
+#player1 {
+    background-image: url('img/virus01.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+}
+
+#player2 {
+    background-image: url('img/virus02.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+}
+
+#player3 {
+    background-image: url('img/virus03.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+}
+
+#virus0 {
+    background-image: url('img/virus00.png');
+    background-size: contain;
+}
+
+#virus1 {
+    background-image: url('img/virus01.png');
+    background-size: contain;
+}
+
+#virus2 {
+    background-image: url('img/virus02.png');
+    background-size: contain;
+}
+
+#virus3 {
+    background-image: url('img/virus03.png');
+    background-size: contain;
+}
+
+.bomb {
+    background-image: url('img/bomb.png');
+    background-size: contain;
+}
+
+.upgrade0 {
+    background-image: url('img/bomb_up.png');
+    background-size: contain;
+}
+
+.upgrade1 {
+    background-image: url('img/strength_up.png');
+    background-size: contain;
+}
+
+.inactive {
+    animation-name: inactiveAnimation;
+    animation-duration: 4s;
+    animation-iteration-count:infinite;
+}
+
+@keyframes inactiveAnimation {
+    0%   {transform: scale(100%) translate(-20px, -20px);}
+    50%  {transform: scale(150%) translate(-15px, -15px);}
+    100% {transform: scale(100%) translate(-20px, -20px);}
+}
+
+/*
+#leftbar {
+    grid-area: leftbar;
+    display: inline-grid;
+
+    grid-template-columns: auto auto min-content auto auto;
+    align-items: center;
+    position: relative;
+    width: 70vw;
+    height: 70vw:
+
+    margin: auto;
+    margin-bottom: 0;
+}
+
+.colors {
+    position: relative;
+}
+
+.colors .color-box {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+}*/
+

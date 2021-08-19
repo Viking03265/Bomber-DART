@@ -1,0 +1,69 @@
+# Build und Deployment Pipeline
+# Do not change until you know what you are doing !!!
+
+image: "transit/kubectl-plus:v1.19.4"
+
+variables:
+  DOMAIN: "webtech.th-luebeck.dev"
+  INGRESS: "True"
+
+stages:
+- prepare
+- compile
+- build
+- deploy
+- destroy
+
+registry-cred:
+  stage: prepare
+  script:
+  - kubectl delete secret gitlab-registry-credentials || true
+  - "kubectl create secret docker-registry gitlab-registry-credentials \
+              --docker-server=$CI_REGISTRY \
+              --docker-username=image-registry \ 
+              --docker-password=$CI_REGISTRY_TOKEN"
+
+source:
+  image: google/dart:2.12
+  stage: compile
+  script:
+  - pub global activate webdev
+  - pub get
+  - webdev build --output web:build
+  artifacts:
+    paths:
+    - build
+
+container:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+  - mkdir -p /kaniko/.docker
+  - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  - ls -lah build/
+  - /kaniko/executor --context . --destination $CI_REGISTRY_IMAGE/webapp-$CI_COMMIT_REF_NAME:latest
+
+webapp:
+  stage: deploy
+  script:
+  - mo deploy/webapp-dep.yaml | kubectl delete -f - || true
+  - mo deploy/webapp-dep.yaml | kubectl apply -f -
+  - mo deploy/webapp-svc.yaml | kubectl apply -f -
+
+ingress:
+  stage: deploy
+  only:
+    variables:
+      - $INGRESS == "True"
+  script:
+  - HOST=webapp-$CI_PROJECT_ID.$DOMAIN mo deploy/webapp-ing.yaml | kubectl apply -f -
+
+terminate:
+  stage: destroy
+  when: manual
+  script:
+  - mo deploy/webapp-dep.yaml | kubectl delete -f - || true
+  - mo deploy/webapp-svc.yaml | kubectl delete -f - || true
+  - HOST=webapp-$GITLAB_USER_ID-$CI_COMMIT_REF_NAME.$DOMAIN mo deploy/webapp-ing.yaml | kubectl delete -f - || true
